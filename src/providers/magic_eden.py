@@ -14,8 +14,7 @@ class MagicEden (Collection):
 
     def _get_nfts(self):
         ''' Get list of NFTs for sale by a collection '''
-        url = f'https://api-mainnet.magiceden.io/rpc/getGlobalActivitiesByQuery?q={{"$match":{{"collection_symbol":"{self.name}"}},"$sort":{{"blockTime":-1}},"$skip":0}}'
-
+        url = f'https://api-mainnet.magiceden.io/rpc/getListedNFTsByQuery?q={{"$match":{{"collectionSymbol":"{self.name}"}},"$sort":{{"blockTime":-1}} }}'
         try:
             return requests.get(url).json().get('results')
         except Exception as e:
@@ -24,10 +23,8 @@ class MagicEden (Collection):
 
     def _to_nft(self, raw_nft):
         ''' Format raw NFT data to nft object '''
-        parsedList = raw_nft.get('parsedList')
-        if not parsedList:
-            return
+        mint_address = raw_nft.get('mintAddress')
+        name = f'https://magiceden.io/item-details/{mint_address}'
+        price = raw_nft.get('price')
 
-        name = raw_nft.get('_id')  # use _id for now
-        price = parsedList.get('amount') / 1000000000
         return NFT(name, price)

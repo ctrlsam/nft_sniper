@@ -8,7 +8,7 @@ class Collection:
         self.floor_price = floor_price
         self.nfts = None
 
-    def get_opportunities(self, threshold=40):
+    def get_opportunities(self, threshold=10):
         ''' Get NFT profitability '''
         self._update_nfts()  # update NFT prices
 
@@ -21,7 +21,7 @@ class Collection:
                 f"nft with {nft.profit}% dosen't meet threshold of "
                 f'{threshold}%')
             if nft.profit >= threshold:
-                logging.success(f'nft found with {nft.profit}%'
+                logging.info(f'nft found with {nft.profit}%'
                                 f' below market value')
                 yield nft
 
